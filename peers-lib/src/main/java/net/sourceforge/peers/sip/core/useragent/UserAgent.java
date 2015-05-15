@@ -28,10 +28,7 @@ import net.sourceforge.peers.Config;
 import net.sourceforge.peers.FileLogger;
 import net.sourceforge.peers.Logger;
 import net.sourceforge.peers.XmlConfig;
-import net.sourceforge.peers.media.AbstractSoundManager;
-import net.sourceforge.peers.media.Echo;
-import net.sourceforge.peers.media.MediaManager;
-import net.sourceforge.peers.media.MediaMode;
+import net.sourceforge.peers.media.*;
 import net.sourceforge.peers.sdp.SDPManager;
 import net.sourceforge.peers.sip.Utils;
 import net.sourceforge.peers.sip.core.useragent.handlers.ByeHandler;
@@ -391,5 +388,17 @@ public class UserAgent {
 
     public TransportManager getTransportManager() {
         return transportManager;
+    }
+
+    public DTMFReader getDtmfReader() {
+        if (mediaManager != null)
+            return mediaManager.getDtmfReader();
+        else
+            return null;
+    }
+
+    public void setDtmfReader(DTMFReader dtmfReader) {
+        if (mediaManager != null)
+            mediaManager.setDtmfReader(dtmfReader);
     }
 }

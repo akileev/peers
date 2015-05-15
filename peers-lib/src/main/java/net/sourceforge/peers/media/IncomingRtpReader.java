@@ -29,6 +29,7 @@ import net.sourceforge.peers.rtp.RtpSession;
 import net.sourceforge.peers.sdp.Codec;
 
 public class IncomingRtpReader implements RtpListener {
+    DTMFReader dtmfReader;
 
     private RtpSession rtpSession;
     private AbstractSoundManager soundManager;
@@ -59,10 +60,22 @@ public class IncomingRtpReader implements RtpListener {
 
     @Override
     public void receivedRtpPacket(RtpPacket rtpPacket) {
-        byte[] rawBuf = decoder.process(rtpPacket.getData());
-        if (soundManager != null) {
-            soundManager.writeData(rawBuf, 0, rawBuf.length);
+        if (rtpPacket.getPayloadType() == 0x65) {
+            if (dtmfReader != null)
+                dtmfReader.dtmfReceived(rtpPacket);
+        } else {
+            byte[] rawBuf = decoder.process(rtpPacket.getData());
+            if (soundManager != null) {
+                soundManager.writeData(rawBuf, 0, rawBuf.length);
+            }
         }
     }
 
+    public DTMFReader getDtmfReader() {
+        return dtmfReader;
+    }
+
+    public void setDtmfReader(DTMFReader dtmfReader) {
+        this.dtmfReader = dtmfReader;
+    }
 }

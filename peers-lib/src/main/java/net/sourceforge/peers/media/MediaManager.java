@@ -43,6 +43,7 @@ public class MediaManager {
     private Logger logger;
     private DatagramSocket datagramSocket;
     private FileReader fileReader;
+    private DTMFReader dtmfReader;
 
     public MediaManager(UserAgent userAgent, Logger logger) {
         this.userAgent = userAgent;
@@ -102,6 +103,7 @@ public class MediaManager {
                 incomingRtpReader = new IncomingRtpReader(
                         captureRtpSender.getRtpSession(), soundManager, codec,
                         logger);
+                incomingRtpReader.setDtmfReader(dtmfReader);
             } catch (IOException e) {
                 logger.error("input/output error", e);
                 return;
@@ -133,6 +135,7 @@ public class MediaManager {
                 incomingRtpReader = new IncomingRtpReader(
                         captureRtpSender.getRtpSession(), null, codec,
                         logger);
+                incomingRtpReader.setDtmfReader(dtmfReader);
             } catch (IOException e) {
                 logger.error("input/output error", e);
                 return;
@@ -189,6 +192,7 @@ public class MediaManager {
                 //FIXME RTP sessions can be different !
                 incomingRtpReader = new IncomingRtpReader(rtpSession,
                         soundManager, codec, logger);
+                incomingRtpReader.setDtmfReader(dtmfReader);
             } catch (IOException e) {
                 logger.error("input/output error", e);
                 return;
@@ -221,6 +225,7 @@ public class MediaManager {
             try {
                 incomingRtpReader = new IncomingRtpReader(rtpSession,
                         null, codec, logger);
+                incomingRtpReader.setDtmfReader(dtmfReader);
             } catch (IOException e) {
                 logger.error("input/output error", e);
                 return;
@@ -328,4 +333,7 @@ public class MediaManager {
         return fileReader;
     }
 
+    public DTMFReader getDtmfReader() { return dtmfReader; }
+
+    public void setDtmfReader(DTMFReader dtmfReader) { this.dtmfReader = dtmfReader; }
 }
